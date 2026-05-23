@@ -8,6 +8,14 @@ target_include_directories(gtest_tesults INTERFACE
 )
 target_compile_features(gtest_tesults INTERFACE cxx_std_17)
 
+# Enable automatic listener registration via environment variables.
+# Intended for use with gtest_main (e.g. ROS 2 / ament_add_gtest) where a
+# custom main() is not available. Do not combine with config_from_args.
+option(GTEST_TESULTS_AUTO_REGISTER "Auto-register Tesults listener via environment variables" OFF)
+if(GTEST_TESULTS_AUTO_REGISTER)
+    target_compile_definitions(gtest_tesults INTERFACE GTEST_TESULTS_AUTO_REGISTER=1)
+endif()
+
 if(BUILD_EXAMPLES)
     find_package(GTest REQUIRED)
     find_package(tesults CONFIG QUIET)
