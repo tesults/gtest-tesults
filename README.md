@@ -2,6 +2,8 @@
 
 Google Test event listener for [Tesults](https://www.tesults.com). Automatically collects and uploads test results when your GoogleTest suite runs.
 
+For full documentation visit [tesults.com/docs/gtest](https://www.tesults.com/docs/gtest).
+
 ## Requirements
 
 - C++17 compiler
