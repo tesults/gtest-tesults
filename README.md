@@ -28,7 +28,7 @@ FetchContent_MakeAvailable(tesults)
 
 FetchContent_Declare(
     gtest_tesults
-    GIT_REPOSITORY https://github.com/tesults/gtest.git
+    GIT_REPOSITORY https://github.com/tesults/gtest-tesults.git
     GIT_TAG        main
     GIT_SHALLOW    TRUE
 )
