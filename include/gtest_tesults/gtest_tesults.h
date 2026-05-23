@@ -217,6 +217,14 @@ private:
     }
 };
 
+// ── Registration flag (forward declaration) ───────────────────────────────────
+namespace detail {
+inline bool& listener_registered() {
+    static bool v = false;
+    return v;
+}
+} // namespace detail
+
 // ── Config parsing ────────────────────────────────────────────────────────────
 
 // Load key=value pairs from a config file. Lines beginning with # are comments.
@@ -267,7 +275,8 @@ inline TesultsListener::Config config_from_args(int& argc, char* argv[]) {
         }
     }
     argc = new_argc;
-    if (cfg.target.empty()) {
+    // Only fall back to env var if auto_register hasn't already used it
+    if (cfg.target.empty() && !detail::listener_registered()) {
         const char* env = std::getenv("TESULTS_TARGET");
         if (env) cfg.target = env;
     }
@@ -314,29 +323,26 @@ inline TesultsListener::Config config_from_env() {
     return cfg;
 }
 
-// Register the Tesults listener using environment variables. Call from main()
-// or let GTEST_TESULTS_AUTO_REGISTER do it automatically (see below).
+// ── Auto-registration ─────────────────────────────────────────────────────────
+
+// Registers the Tesults listener using environment variables. Called
+// automatically at static-initialisation time (before main()) whenever
+// TESULTS_TARGET is set. config_from_args skips the TESULTS_TARGET env-var
+// fallback if this has already fired, preventing double-registration.
 inline void auto_register() {
     auto cfg = config_from_env();
     if (cfg.target.empty()) return;
     testing::UnitTest::GetInstance()->listeners().Append(
         new TesultsListener(cfg)
     );
+    detail::listener_registered() = true;
 }
 
-// ── Auto-registration for use with gtest_main (e.g. ROS 2) ───────────────────
-// Define GTEST_TESULTS_AUTO_REGISTER (e.g. via CMake target_compile_definitions)
-// to register the listener automatically at program startup without a custom
-// main(). Configure via environment variables (see config_from_env above).
-// Do NOT combine with the manual config_from_args approach — that would result
-// in two listeners and a double upload.
-#ifdef GTEST_TESULTS_AUTO_REGISTER
 namespace detail {
 struct AutoRegister {
     AutoRegister() { gtest_tesults::auto_register(); }
 };
 inline const AutoRegister auto_register_instance;
 } // namespace detail
-#endif
 
 } // namespace gtest_tesults
