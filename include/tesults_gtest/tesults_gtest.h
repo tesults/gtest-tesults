@@ -1,4 +1,4 @@
-// gtest_tesults.h — Google Test event listener for Tesults
+// tesults_gtest.h — Google Test event listener for Tesults
 #pragma once
 
 #include <tesults/tesults.h>
@@ -16,7 +16,7 @@
 #include <string>
 #include <vector>
 
-namespace gtest_tesults {
+namespace tesults_gtest {
 
 // ── Enhanced reporting storage ────────────────────────────────────────────────
 
@@ -169,8 +169,8 @@ public:
         tesults::Data data;
         data.target             = config_.target;
         data.cases              = cases_;
-        data.integrationName    = "gtest-tesults";
-        data.integrationVersion = "1.0.0";
+        data.integrationName    = "tesults-gtest";
+        data.integrationVersion = "1.0.2";
         data.testFramework      = "googletest";
 
         std::cout << "Tesults results uploading..." << std::endl;
@@ -340,9 +340,9 @@ inline void auto_register() {
 
 namespace detail {
 struct AutoRegister {
-    AutoRegister() { gtest_tesults::auto_register(); }
+    AutoRegister() { tesults_gtest::auto_register(); }
 };
 inline const AutoRegister auto_register_instance;
 } // namespace detail
 
-} // namespace gtest_tesults
+} // namespace tesults_gtest

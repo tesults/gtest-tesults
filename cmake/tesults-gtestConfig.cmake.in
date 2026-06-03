@@ -4,6 +4,6 @@ include(CMakeFindDependencyMacro)
 find_dependency(GTest CONFIG REQUIRED)
 find_dependency(tesults CONFIG REQUIRED)
 
-include("${CMAKE_CURRENT_LIST_DIR}/gtest-tesultsTargets.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/tesults-gtestTargets.cmake")
 
-check_required_components(gtest-tesults)
+check_required_components(tesults-gtest)

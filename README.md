@@ -1,4 +1,4 @@
-# gtest-tesults
+# tesults-gtest
 
 Google Test event listener for [Tesults](https://www.tesults.com). Automatically collects and uploads test results when your GoogleTest suite runs.
 
@@ -29,23 +29,23 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(tesults)
 
 FetchContent_Declare(
-    gtest_tesults
-    GIT_REPOSITORY https://github.com/tesults/gtest-tesults.git
+    tesults_gtest
+    GIT_REPOSITORY https://github.com/tesults/tesults-gtest.git
     GIT_TAG        main
     GIT_SHALLOW    TRUE
 )
-FetchContent_MakeAvailable(gtest_tesults)
+FetchContent_MakeAvailable(tesults_gtest)
 
 target_link_libraries(your_tests PRIVATE
     tesults
-    gtest_tesults
+    tesults_gtest
     GTest::gtest
 )
 ```
 
 ### Manual copy
 
-Copy `include/gtest_tesults/gtest_tesults.h` into your project and ensure both tesults-cpp and GoogleTest headers are on your include path.
+Copy `include/tesults_gtest/tesults_gtest.h` into your project and ensure both tesults-cpp and GoogleTest headers are on your include path.
 
 ## Usage
 
@@ -53,14 +53,14 @@ In your test executable's `main.cpp`, call `config_from_args` **before** `testin
 
 ```cpp
 #include <gtest/gtest.h>
-#include <gtest_tesults/gtest_tesults.h>
+#include <tesults_gtest/tesults_gtest.h>
 
 int main(int argc, char* argv[]) {
-    auto cfg = gtest_tesults::config_from_args(argc, argv);
+    auto cfg = tesults_gtest::config_from_args(argc, argv);
     testing::InitGoogleTest(&argc, argv);
     if (!cfg.target.empty()) {
         testing::UnitTest::GetInstance()->listeners().Append(
-            new gtest_tesults::TesultsListener(cfg)
+            new tesults_gtest::TesultsListener(cfg)
         );
     }
     return RUN_ALL_TESTS();
